@@ -4,4 +4,5 @@ gemspec
 gem 'rake'
 gem 'rspec', '~>2'
 gem 'sqlite3'
-gem 'activerecord', '~>3.0.0'
+gem 'appraisal'
+gem 'activerecord', :require => 'active_record'

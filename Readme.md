@@ -5,9 +5,8 @@ Install
 
     gem install test_after_commit
 
-TODO
-====
- - Appraisal for rails 3.0 3.1 3.2 edge
+    # Gemfile
+    gem 'test_after_commit', :group => :test
 
 Author
 ======

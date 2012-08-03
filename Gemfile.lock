@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    test_after_commit (0.0.0)
+    test_after_commit (0.0.1)
 
 GEM
   remote: http://rubygems.org/

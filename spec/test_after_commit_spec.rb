@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe TestAfterCommit do
-  around do |example|
-    Car.transaction do # simulate transactional fixtures
-      Car.called.clear
-      example.call
-    end
+  before do
+    CarObserver.recording = false
+    Car.called.clear
   end
 
   it "has a VERSION" do
@@ -29,5 +27,18 @@ describe TestAfterCommit do
     car.make_rollback = true
     car.save.should == nil
     Car.called.should == []
+  end
+
+  context "Observer" do
+    before do
+      CarObserver.recording = true
+    end
+
+    xit "should record commits" do
+      Car.transaction do
+        Car.create
+      end
+      Car.called.should == [:update, :observed_after_commit, :always]
+    end
   end
 end

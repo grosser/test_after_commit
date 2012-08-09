@@ -6,7 +6,7 @@ task :spec do
 end
 
 task :default do
-  sh "bundle exec rake appraisal:install && bundle exec rake appraisal spec"
+  sh "bundle exec rake appraisal:install && bundle exec rake appraisal spec && REAL=1 bundle exec rake appraisal spec"
 end
 
 # extracted from https://github.com/grosser/project_template

@@ -49,3 +49,14 @@ class Car < ActiveRecord::Base
     self.class.called :update
   end
 end
+
+class CarObserver < ActiveRecord::Observer
+  cattr_accessor :recording
+
+  [:after_commit, :after_rollback].each do |action|
+    define_method action do |record|
+      return unless recording
+      Car.calls << :observed_after_commit
+    end
+  end
+end

@@ -8,6 +8,10 @@ Install
     # Gemfile
     gem 'test_after_commit', :group => :test
 
+TIPS
+====
+ - after_commit / after_rollback / after_commit_on_update / after_commit_on_create do not work in observers at all
+
 Author
 ======
 

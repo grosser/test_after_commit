@@ -10,7 +10,8 @@ Install
 
 TIPS
 ====
- - after_commit / after_rollback / after_commit_on_update / after_commit_on_create do not work in observers at all
+ - hooks do not work in observers (with or without this gem)
+ - hooks do not re-raise errors (with or without this gem)
 
 Author
 ======

@@ -17,10 +17,11 @@ class Car < ActiveRecord::Base
   after_commit :simple_after_commit
   after_commit :simple_after_commit_on_create, :on => :create
   after_commit :simple_after_commit_on_update, :on => :update
+  after_commit :maybe_raise_errors
 
   after_save :trigger_rollback
 
-  attr_accessor :make_rollback
+  attr_accessor :make_rollback, :raise_error
 
   def self.called(x=nil)
     @called ||= []
@@ -36,6 +37,13 @@ class Car < ActiveRecord::Base
   end
 
   private
+
+  def maybe_raise_errors
+    if raise_error
+      puts "MAYBE RAISE" # just debugging, but it really does not work ...
+      raise "Expected error"
+    end
+  end
 
   def simple_after_commit
     self.class.called :always

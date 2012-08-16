@@ -29,6 +29,14 @@ describe TestAfterCommit do
     Car.called.should == []
   end
 
+  xit "raises errors" do
+    car = Car.new
+    car.raise_error = true
+    expect{
+      car.save!
+    }.to raise_error "Expected error"
+  end
+
   context "Observer" do
     before do
       CarObserver.recording = true

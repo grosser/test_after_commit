@@ -40,7 +40,7 @@ class Car < ActiveRecord::Base
 
   def maybe_raise_errors
     if raise_error
-      puts "MAYBE RAISE" # just debugging, but it really does not work ...
+      # puts "MAYBE RAISE" # just debugging, but it really does not work ...
       raise "Expected error"
     end
   end

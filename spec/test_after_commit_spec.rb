@@ -29,12 +29,14 @@ describe TestAfterCommit do
     Car.called.should == []
   end
 
-  xit "raises errors" do
+  it "raises errors" do
     car = Car.new
     car.raise_error = true
-    expect{
-      car.save!
-    }.to raise_error "Expected error"
+    pending do
+      expect{
+        car.save!
+      }.to raise_error "Expected error"
+    end
   end
 
   context "Observer" do
@@ -42,11 +44,13 @@ describe TestAfterCommit do
       CarObserver.recording = true
     end
 
-    xit "should record commits" do
+    it "should record commits" do
       Car.transaction do
         Car.create
       end
-      Car.called.should == [:update, :observed_after_commit, :always]
+      pending do
+        Car.called.should == [:update, :observed_after_commit, :always]
+      end
     end
   end
 end

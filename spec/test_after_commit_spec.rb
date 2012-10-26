@@ -40,6 +40,7 @@ describe TestAfterCommit do
   end
 
   it "can save in after_commit" do
+    pending "this does not work in REAL mode but in tests except for rails 3.0"
     car = Car.new
     car.do_after_create_save = true
     car.save!

@@ -39,6 +39,14 @@ describe TestAfterCommit do
     end
   end
 
+  it "can save in after_commit" do
+    car = Car.new
+    car.do_after_create_save = true
+    car.save!
+    Car.called.should == [:save_once, :create, :always]
+    car.counter.should == 3
+  end
+
   context "Observer" do
     before do
       CarObserver.recording = true

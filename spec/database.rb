@@ -10,18 +10,21 @@ ActiveRecord::Migration.verbose = false
 
 ActiveRecord::Schema.define(:version => 1) do
   create_table "cars", :force => true do |t|
+    t.integer :counter, :default => 0, :null => false
+    t.timestamps
   end
 end
 
 class Car < ActiveRecord::Base
   after_commit :simple_after_commit
   after_commit :simple_after_commit_on_create, :on => :create
+  after_commit :save_once, :on => :create, :if => :do_after_create_save
   after_commit :simple_after_commit_on_update, :on => :update
   after_commit :maybe_raise_errors
 
   after_save :trigger_rollback
 
-  attr_accessor :make_rollback, :raise_error
+  attr_accessor :make_rollback, :raise_error, :do_after_create_save
 
   def self.called(x=nil)
     @called ||= []
@@ -37,6 +40,11 @@ class Car < ActiveRecord::Base
   end
 
   private
+
+  def save_once
+    update_attributes(:counter => 3)
+    self.class.called :save_once
+  end
 
   def maybe_raise_errors
     if raise_error

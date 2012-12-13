@@ -57,9 +57,7 @@ describe TestAfterCommit do
       Car.transaction do
         Car.create
       end
-      pending do
-        Car.called.should == [:update, :observed_after_commit, :always]
-      end
+      Car.called.should == [:observed_after_commit, :create, :always]
     end
   end
 end

@@ -72,7 +72,10 @@ class CarObserver < ActiveRecord::Observer
   [:after_commit, :after_rollback].each do |action|
     define_method action do |record|
       return unless recording
-      Car.calls << :observed_after_commit
+      Car.called << :observed_after_commit
     end
   end
 end
+
+Car.observers = :car_observer
+Car.instantiate_observers

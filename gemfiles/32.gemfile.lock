@@ -4,7 +4,7 @@ PATH
     test_after_commit (0.0.1)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.7)
       activesupport (= 3.2.7)

@@ -6,6 +6,7 @@ gem "rake"
 gem "rspec", "~>2"
 gem "sqlite3"
 gem "appraisal"
-gem "activerecord", "~> 3.1.6"
+gem "activerecord", "~> 4.0.0.beta1"
+gem "rails-observers"
 
 gemspec :path=>"../"

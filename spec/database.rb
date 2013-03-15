@@ -1,6 +1,10 @@
 # setup database
 require 'active_record'
 
+if ActiveRecord::VERSION::MAJOR > 3
+  require "rails/observers/activerecord/active_record"
+end
+
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
   :database => ':memory:'

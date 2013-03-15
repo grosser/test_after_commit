@@ -16,26 +16,25 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
   # accounted for since they will raise uncaught through this method and
   # prevent the code after the hook from running.
   #
-  def transaction_with_transactional_fixtures(*args)
-    return_value = nil
-    rolled_back  = false
-
-    transaction_without_transactional_fixtures(*args) do
-      begin
-        return_value = yield
-      rescue ActiveRecord::Rollback
-        rolled_back = true
-        raise
-      end
-    end
-
-    commit_transaction_records(false) if not rolled_back and open_transactions == 1
-
-    return_value
-  end
-  alias_method_chain :transaction, :transactional_fixtures
-
+  #def transaction_with_transactional_fixtures(*args)
+  #  return_value = nil
+  #  rolled_back  = false
   #
+  #  transaction_without_transactional_fixtures(*args) do
+  #    begin
+  #      return_value = yield
+  #    rescue ActiveRecord::Rollback
+  #      rolled_back = true
+  #      raise
+  #    end
+  #  end
+  #
+  #  commit_transaction_records(false) if not rolled_back and open_transactions == 1
+  #
+  #  return_value
+  #end
+  #alias_method_chain :transaction, :transactional_fixtures
+
   # The @_current_transaction_records is a stack of arrays, each one
   # containing the records associated with the corresponding transaction
   # in the transaction stack. This is used by the

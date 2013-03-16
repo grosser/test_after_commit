@@ -1,6 +1,10 @@
 # setup database
 require 'active_record'
 
+if ActiveRecord::VERSION::MAJOR > 3
+  require "rails/observers/activerecord/active_record"
+end
+
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
   :database => ':memory:'
@@ -42,7 +46,7 @@ class Car < ActiveRecord::Base
   private
 
   def save_once
-    update_attributes(:counter => 3)
+    update_attributes(:counter => 3) unless counter == 3
     self.class.called :save_once
   end
 

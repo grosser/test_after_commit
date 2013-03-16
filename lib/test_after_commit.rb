@@ -5,62 +5,37 @@ end
 
 $PASS = 0
 
-if ActiveRecord::VERSION::MAJOR >= 4
-  ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
-    def transaction_with_transactional_fixtures(*args)
-      @test_open_transactions ||= 0
-      transaction_without_transactional_fixtures(*args) do
-        begin
-          @test_open_transactions += 1
-          yield
-        rescue ActiveRecord::Rollback => e
-          raise e
-        else
-          if @test_open_transactions == 2
-            @transaction.commit_records
-            @transaction.records.clear # prevent duplicate .commit!
-            @transaction.instance_variable_get(:@state).set_state(nil)
-          end
-        ensure
-          @test_open_transactions -= 1
+ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
+  def transaction_with_transactional_fixtures(*args)
+    @test_open_transactions ||= 0
+    transaction_without_transactional_fixtures(*args) do
+      begin
+        @test_open_transactions += 1
+        yield
+      rescue ActiveRecord::Rollback => e
+        raise e
+      else
+        if @test_open_transactions == 2
+          test_commit_records
         end
+      ensure
+        @test_open_transactions -= 1
       end
     end
-    alias_method_chain :transaction, :transactional_fixtures
   end
-else
-# https://gist.github.com/1305285 + removed RSpec specific code
-  ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
-    #
-    # Run the normal transaction method; when it's done, check to see if there
-    # is exactly one open transaction. If so, that's the transactional
-    # fixtures transaction; from the model's standpoint, the completed
-    # transaction is the real deal. Send commit callbacks to models.
-    #
-    # If the transaction block raises a Rollback, we need to know, so we don't
-    # call the commit hooks. Other exceptions don't need to be explicitly
-    # accounted for since they will raise uncaught through this method and
-    # prevent the code after the hook from running.
-    #
-    def transaction_with_transactional_fixtures(*args)
-      return_value = nil
-      rolled_back  = false
+  alias_method_chain :transaction, :transactional_fixtures
 
-      transaction_without_transactional_fixtures(*args) do
-        begin
-          return_value = yield
-        rescue ActiveRecord::Rollback
-          rolled_back = true
-          raise
-        end
-      end
-
-      commit_transaction_records(false) if not rolled_back and open_transactions == 1
-
-      return_value
+  def test_commit_records
+    if ActiveRecord::VERSION::MAJOR == 3
+      commit_transaction_records(false)
+    else
+      @transaction.commit_records
+      @transaction.records.clear # prevent duplicate .commit!
+      @transaction.instance_variable_get(:@state).set_state(nil)
     end
-    alias_method_chain :transaction, :transactional_fixtures
+  end
 
+  if ActiveRecord::VERSION::MAJOR == 3
     # The @_current_transaction_records is a stack of arrays, each one
     # containing the records associated with the corresponding transaction
     # in the transaction stack. This is used by the

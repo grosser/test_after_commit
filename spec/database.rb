@@ -46,7 +46,7 @@ class Car < ActiveRecord::Base
   private
 
   def save_once
-    update_attributes(:counter => 3)
+    update_attributes(:counter => 3) unless counter == 3
     self.class.called :save_once
   end
 

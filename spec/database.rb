@@ -15,11 +15,14 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define(:version => 1) do
   create_table "cars", :force => true do |t|
     t.integer :counter, :default => 0, :null => false
+    t.integer :car_id
     t.timestamps
   end
 end
 
 class Car < ActiveRecord::Base
+  has_many :cars
+
   after_commit :simple_after_commit
   after_commit :simple_after_commit_on_create, :on => :create
   after_commit :save_once, :on => :create, :if => :do_after_create_save
@@ -83,3 +86,8 @@ end
 
 Car.observers = :car_observer
 Car.instantiate_observers
+
+class Bar < ActiveRecord::Base
+  self.table_name = "cars"
+  has_many :bars, :foreign_key => :car_id
+end

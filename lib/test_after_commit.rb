@@ -11,13 +11,14 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
     transaction_without_transactional_fixtures(*args) do
       begin
         @test_open_transactions += 1
-        yield
+        result = yield
       rescue ActiveRecord::Rollback => e
         raise e
       else
         if @test_open_transactions == 2
           test_commit_records
         end
+        result
       ensure
         @test_open_transactions -= 1
       end

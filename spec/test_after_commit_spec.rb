@@ -64,6 +64,16 @@ describe TestAfterCommit do
     car.counter.should == 3
   end
 
+  it "returns on create and on create of associations" do
+    Car.create!.class.should == Car
+    Car.create!.cars.create.class.should == Car
+  end
+
+  it "returns on create and on create of associations without after_commit" do
+    Bar.create!.class.should == Bar
+    Bar.create!.bars.create.class.should == Bar
+  end
+
   context "Observer" do
     before do
       CarObserver.recording = true

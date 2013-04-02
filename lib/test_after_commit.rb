@@ -3,8 +3,6 @@ require 'test_after_commit/version'
 module TestAfterCommit
 end
 
-$PASS = 0
-
 ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
   def transaction_with_transactional_fixtures(*args)
     @test_open_transactions ||= 0

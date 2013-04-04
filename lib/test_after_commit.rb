@@ -13,7 +13,7 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       rescue ActiveRecord::Rollback => e
         raise e
       else
-        if @test_open_transactions == 2
+        if @test_open_transactions == 1
           test_commit_records
         end
         result

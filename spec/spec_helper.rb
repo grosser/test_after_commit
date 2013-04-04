@@ -13,7 +13,7 @@ RSpec.configure do |config|
       # open a transaction without using .transaction as activerecord use_transactional_fixtures does
       if ActiveRecord::VERSION::MAJOR > 3
         connection = ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection).first
-        connection.begin_transaction joinable: false
+        connection.begin_transaction :joinable => false
       else
         connection = ActiveRecord::Base.connection_handler.connection_pools.values.map(&:connection).first
         connection.increment_open_transactions

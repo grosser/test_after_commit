@@ -5,7 +5,7 @@ Install
 
     gem install test_after_commit
 
-    # Gemfile
+    # Gemfile (never include in :development !)
     gem 'test_after_commit', :group => :test
 
 TIPS

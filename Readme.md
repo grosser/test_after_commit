@@ -8,6 +8,28 @@ Install
     # Gemfile (never include in :development !)
     gem 'test_after_commit', :group => :test
 
+Usage
+=====
+Test that the methods get called or the side-effect of the methods, something like:
+
+```Ruby
+class Car < ActiveRecord::Base
+  after_commit :foo, :on => :update
+
+  def foo
+    $foo = 1
+  end
+end
+
+...
+
+it "sets $foo on commit" do
+  $foo.should == nil
+  car.save!
+  $foo.should == 1
+end
+```
+
 TIPS
 ====
  - hooks do not re-raise errors (with or without this gem)

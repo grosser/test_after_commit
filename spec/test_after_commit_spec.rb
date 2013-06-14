@@ -22,6 +22,13 @@ describe TestAfterCommit do
     Car.called.should == [:update, :always]
   end
 
+  it "fires on update_attribute" do
+    car = Car.create
+    Car.called.clear
+    car.update_attribute :counter, 123
+    Car.called.should == [:update, :always]
+  end
+
   it "does not fire on rollback" do
     car = Car.new
     car.make_rollback = true

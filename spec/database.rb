@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(:version => 1) do
     t.integer :car_id
     t.timestamps
   end
+
+  create_table "addresses", :force => true do |t|
+    t.integer :number_of_residents, :default => 0, :null => false
+    t.timestamps
+  end
+
+  create_table "people", :force => true do |t|
+    t.belongs_to :address
+    t.timestamps
+  end
 end
 
 class Car < ActiveRecord::Base
@@ -90,4 +100,25 @@ Car.instantiate_observers
 class Bar < ActiveRecord::Base
   self.table_name = "cars"
   has_many :bars, :foreign_key => :car_id
+end
+
+class Address < ActiveRecord::Base
+  has_many :people
+
+  after_commit :create_residents, :on => :create
+
+  def create_residents
+    Person.create!(:address => self)
+    Person.create!(:address => self)
+  end
+end
+
+class Person < ActiveRecord::Base
+  belongs_to :address
+
+  after_commit :update_number_of_residents_on_address, :on => :create
+
+  def update_number_of_residents_on_address
+    address.update_attribute(:number_of_residents, address.number_of_residents + 1)
+  end
 end

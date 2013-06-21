@@ -93,4 +93,19 @@ describe TestAfterCommit do
       Car.called.should == [:observed_after_commit, :create, :always]
     end
   end
+
+  context "nested after_commit" do
+    before do
+      @address = Address.create!
+    end
+
+    it 'is executed' do
+      lambda { Person.create!(:address => @address) }.should change(@address, :number_of_residents).by(1)
+
+      # one from the line above and two from the after_commit
+      @address.people.count.should == 3
+
+      @address.number_of_residents.should == 3
+    end
+  end
 end

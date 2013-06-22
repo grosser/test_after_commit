@@ -108,6 +108,12 @@ class Address < ActiveRecord::Base
   after_commit :create_residents, :on => :create
 
   def create_residents
+    if ActiveRecord::VERSION::MAJOR == 3
+      # stupid hack because nested after_commit is broken on rails 3 and loops
+      return if @create_residents
+      @create_residents = true
+    end
+
     Person.create!(:address => self)
     Person.create!(:address => self)
   end
@@ -119,6 +125,6 @@ class Person < ActiveRecord::Base
   after_commit :update_number_of_residents_on_address, :on => :create
 
   def update_number_of_residents_on_address
-    address.update_attribute(:number_of_residents, address.number_of_residents + 1)
+    address.update_attributes(:number_of_residents => address.number_of_residents + 1)
   end
 end

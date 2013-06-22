@@ -99,7 +99,8 @@ describe TestAfterCommit do
       @address = Address.create!
     end
 
-    xit 'is executed' do
+    it 'is executed' do
+      pending unless ENV["REAL"] && ActiveRecord::VERSION::MAJOR == 4
       lambda { Person.create!(:address => @address) }.should change(@address, :number_of_residents).by(1)
 
       # one from the line above and two from the after_commit

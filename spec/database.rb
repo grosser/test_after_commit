@@ -56,6 +56,12 @@ class Car < ActiveRecord::Base
     raise ActiveRecord::Rollback if make_rollback
   end
 
+  def self.returning_method_with_transaction
+    Car.transaction do
+      return Car.create
+    end
+  end
+
   private
 
   def save_once

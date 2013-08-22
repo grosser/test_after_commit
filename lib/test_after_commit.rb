@@ -11,14 +11,14 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
         @test_open_transactions += 1
         result = yield
       rescue ActiveRecord::Rollback => e
+        rolled_back = true
         raise e
-      else
-        if @test_open_transactions == 1
+      ensure
+        if @test_open_transactions == 1 && !rolled_back
           test_commit_records
         end
-        result
-      ensure
         @test_open_transactions -= 1
+        result
       end
     end
   end

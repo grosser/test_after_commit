@@ -47,6 +47,11 @@ describe TestAfterCommit do
     Car.called.should == [:create, :always]
   end
 
+  it "fires when transaction block returns from method" do
+    Car.returning_method_with_transaction
+    Car.called.should == [:create, :always]
+  end
+
   it "does not raises errors" do
     car = Car.new
     car.raise_error = true

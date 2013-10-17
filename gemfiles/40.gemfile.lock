@@ -1,7 +1,7 @@
 PATH
   remote: /Users/mgrosser/code/tools/test_after_commit
   specs:
-    test_after_commit (0.2.0)
+    test_after_commit (0.2.1)
 
 GEM
   remote: https://rubygems.org/

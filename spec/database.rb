@@ -30,7 +30,20 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 end
 
+module Called
+  def called(x=nil)
+    @called ||= []
+    if x
+      @called << x
+    else
+      @called
+    end
+  end
+end
+
 class Car < ActiveRecord::Base
+  extend Called
+
   has_many :cars
 
   after_commit :simple_after_commit
@@ -42,15 +55,6 @@ class Car < ActiveRecord::Base
   after_save :trigger_rollback
 
   attr_accessor :make_rollback, :raise_error, :do_after_create_save
-
-  def self.called(x=nil)
-    @called ||= []
-    if x
-      @called << x
-    else
-      @called
-    end
-  end
 
   def trigger_rollback
     raise ActiveRecord::Rollback if make_rollback
@@ -106,6 +110,23 @@ Car.instantiate_observers
 class Bar < ActiveRecord::Base
   self.table_name = "cars"
   has_many :bars, :foreign_key => :car_id
+end
+
+class MultiBar < ActiveRecord::Base
+  extend Called
+
+  self.table_name = "cars"
+
+  after_commit :one, :on => :create
+  after_commit :two, :on => :create
+
+  def one
+    self.class.called << :one
+  end
+
+  def two
+    self.class.called << :two
+  end
 end
 
 class Address < ActiveRecord::Base

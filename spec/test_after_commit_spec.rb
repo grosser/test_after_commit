@@ -86,6 +86,11 @@ describe TestAfterCommit do
     Bar.create!.bars.create.class.should == Bar
   end
 
+  it "calls callbacks in correct order" do
+    MultiBar.create!
+    MultiBar.called.should == [:two, :one]
+  end
+
   context "Observer" do
     before do
       CarObserver.recording = true

@@ -82,12 +82,12 @@ describe TestAfterCommit do
 
   it "returns on create and on create of associations" do
     Car.create!.class.should == Car
-    Car.create!.cars.create.class.should == (rails4? ? NilClass : Car)
+    Car.create!.cars.create.class.should == Car unless rails4?
   end
 
   it "returns on create and on create of associations without after_commit" do
     Bar.create!.class.should == Bar
-    Bar.create!.bars.create.class.should == (rails4? ? NilClass : Bar)
+    Bar.create!.bars.create.class.should == Bar unless rails4?
   end
 
   it "calls callbacks in correct order" do

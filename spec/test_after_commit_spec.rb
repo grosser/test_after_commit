@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe TestAfterCommit do
+  def rails4?
+    ActiveRecord::VERSION::MAJOR >= 4
+  end
+
   before do
     CarObserver.recording = false
     Car.called.clear
@@ -67,7 +71,7 @@ describe TestAfterCommit do
     car.do_after_create_save = true
     car.save!
 
-    expected = if ActiveRecord::VERSION::MAJOR >= 4
+    expected = if rails4?
       [:update, :always, :save_once, :always] # some kind of loop prevention ... investigate we must
     else
       [:save_once, :create, :always, :save_once, :create, :always]
@@ -78,12 +82,12 @@ describe TestAfterCommit do
 
   it "returns on create and on create of associations" do
     Car.create!.class.should == Car
-    Car.create!.cars.create.class.should == Car
+    Car.create!.cars.create.class.should == (rails4? ? NilClass : Car)
   end
 
   it "returns on create and on create of associations without after_commit" do
     Bar.create!.class.should == Bar
-    Bar.create!.bars.create.class.should == Bar
+    Bar.create!.bars.create.class.should == (rails4? ? NilClass : Bar)
   end
 
   it "calls callbacks in correct order" do

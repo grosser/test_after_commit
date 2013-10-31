@@ -100,6 +100,7 @@ class CarObserver < ActiveRecord::Observer
     define_method action do |record|
       return unless recording
       Car.called << :observed_after_commit
+      Untracked.create!
     end
   end
 end
@@ -154,4 +155,8 @@ class Person < ActiveRecord::Base
   def update_number_of_residents_on_address
     address.update_attributes(:number_of_residents => address.number_of_residents + 1)
   end
+end
+
+class Untracked < ActiveRecord::Base
+  self.table_name = "cars"
 end

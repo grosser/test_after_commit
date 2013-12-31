@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/mgrosser/code/tools/test_after_commit
+  remote: ../
   specs:
     test_after_commit (0.2.2)
 

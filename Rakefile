@@ -1,11 +1,16 @@
 require 'bundler/gem_tasks'
 require 'appraisal'
 require 'bump/tasks'
+require 'wwtd/tasks'
 
 task :spec do
   sh "rspec spec/"
 end
 
-task :default do
-  sh "bundle exec rake appraisal:install && bundle exec rake appraisal spec && REAL=1 bundle exec rake appraisal spec"
+task :default => "appraisal:install" do
+  Rake::Task[:wwtd].execute
+
+  puts "REAL=1"
+  ENV["REAL"] = "1"
+  Rake::Task[:wwtd].execute
 end

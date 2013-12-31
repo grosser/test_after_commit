@@ -1,6 +1,14 @@
 bundler_args: ""
 language: ruby
+gemfile:
+  - gemfiles/32.gemfile
+  - gemfiles/40.gemfile
 rvm:
   - ree
   - 1.9.3
   - 2.0.0
+matrix:
+  exclude:
+    - rvm: ree
+      gemfile: gemfiles/40.gemfile
+script: bundle exec rake spec

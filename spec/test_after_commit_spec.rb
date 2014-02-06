@@ -40,6 +40,13 @@ describe TestAfterCommit do
     Car.called.should == []
   end
 
+  it "does not fire on ActiveRecord::RecordInvalid" do
+    lambda {
+      FuBear.create!
+    }.should raise_exception(ActiveRecord::RecordInvalid)
+    FuBear.called.should == []
+  end
+
   it "does not fire multiple times in nested transactions" do
     Car.transaction do
       Car.transaction do

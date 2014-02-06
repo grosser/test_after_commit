@@ -28,6 +28,11 @@ ActiveRecord::Schema.define(:version => 1) do
     t.belongs_to :address
     t.timestamps
   end
+
+  create_table "fu_bears", :force => true do |t|
+    t.string :name
+    t.timestamps
+  end
 end
 
 module Called
@@ -159,4 +164,17 @@ end
 
 class Untracked < ActiveRecord::Base
   self.table_name = "cars"
+end
+
+class FuBear < ActiveRecord::Base
+  extend Called
+
+  self.table_name = "fu_bears"
+  validates_presence_of :name
+
+  after_commit :simple_after_commit
+
+  def simple_after_commit
+    self.class.called :always
+  end
 end

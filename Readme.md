@@ -42,6 +42,7 @@ Inspired by https://gist.github.com/1305285
 ### [Contributors](https://github.com/grosser/test_after_commit/contributors)
  - [James Le Cuirot](https://github.com/chewi)
  - [emirose](https://github.com/emirose)
+ - [Brad Gessler](https://github.com/bradgessler)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

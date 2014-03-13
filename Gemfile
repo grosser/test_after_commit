@@ -7,4 +7,5 @@ gem 'rspec', '~>2'
 gem 'sqlite3'
 gem 'appraisal'
 gem 'activerecord', :require => 'active_record'
+gem 'rails-observers' unless defined?(Appraisal)
 gem 'wwtd'

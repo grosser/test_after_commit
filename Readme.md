@@ -30,15 +30,6 @@ it "sets $foo on commit" do
 end
 ```
 
-Testing
-=======
-
-To test this plugin against all supported versions of Rails, run:
-
-```sh
-$ wwtd
-```
-
 TIPS
 ====
  - hooks do not re-raise errors (with or without this gem)

@@ -10,7 +10,7 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       begin
         @test_open_transactions += 1
         result = yield
-      rescue ActiveRecord::Rollback => e
+      rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid => e
         rolled_back = true
         raise e
       ensure

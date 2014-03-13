@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift 'lib'
 require File.expand_path '../database', __FILE__
+I18n.enforce_available_locales = false
 
 if ENV['REAL']
   puts 'using real transactions'

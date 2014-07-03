@@ -104,7 +104,7 @@ class CarObserver < ActiveRecord::Observer
   [:after_commit, :after_rollback].each do |action|
     define_method action do |record|
       return unless recording
-      Car.called << :observed_after_commit
+      Car.called << "observed_#{action}".to_sym
       Untracked.create!
     end
   end

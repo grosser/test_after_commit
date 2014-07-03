@@ -113,6 +113,26 @@ describe TestAfterCommit do
       end
       Car.called.should == [:observed_after_commit, :create, :always]
     end
+
+    it "should record rollbacks caused by ActiveRecord::Rollback" do
+      Car.transaction do
+        car = Car.create
+        raise ActiveRecord::Rollback
+      end
+      Car.called.should == [:observed_after_rollback]
+    end
+
+    it "should record rollbacks caused by any type of exception" do
+      begin
+        Car.transaction do
+          car = Car.create
+          raise Exception, 'simulated error'
+        end
+      rescue Exception => e
+        e.message.should == 'simulated error'
+      end
+      Car.called.should == [:observed_after_rollback]
+    end
   end
 
   context "nested after_commit" do

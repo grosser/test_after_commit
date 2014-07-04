@@ -2,6 +2,7 @@ PATH
   remote: ../
   specs:
     test_after_commit (0.2.3)
+      activerecord (>= 3.2)
 
 GEM
   remote: https://rubygems.org/

@@ -3,12 +3,19 @@ language: ruby
 gemfile:
   - gemfiles/32.gemfile
   - gemfiles/40.gemfile
+  - gemfiles/41.gemfile
 rvm:
   - ree
   - 1.9.3
   - 2.0.0
+  - 2.1.2
+env:
+  - REAL=1
+  - SUBBED=1
 matrix:
   exclude:
     - rvm: ree
       gemfile: gemfiles/40.gemfile
+    - rvm: ree
+      gemfile: gemfiles/41.gemfile
 script: bundle exec rake spec

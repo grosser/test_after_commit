@@ -70,16 +70,14 @@ describe TestAfterCommit do
   end
 
   it "can do 1 save in after_commit" do
-    if !ENV['REAL']
-      pending "this results in infinite loop in REAL mode except on 4.0 but works in tests except for rails 3.0"
-    end
+    pending "different results than real" unless ENV['REAL']
 
     car = Car.new
     car.do_after_create_save = true
     car.save!
 
     expected = if rails4?
-      [:update, :always, :save_once, :always] # some kind of loop prevention ... investigate we must
+      [:save_once, :create, :always, :save_once, :always]
     else
       [:save_once, :create, :always, :save_once, :create, :always]
     end
@@ -136,13 +134,14 @@ describe TestAfterCommit do
   end
 
   context "nested after_commit" do
-    before do
-      @address = Address.create!
-    end
-
     it 'is executed' do
-      pending unless ENV["REAL"] && ActiveRecord::VERSION::MAJOR == 4
-      lambda { Person.create!(:address => @address) }.should change(@address, :number_of_residents).by(1)
+      skip if ENV["REAL"] && ActiveRecord::VERSION::MAJOR == 4 # infinite loop
+      pending if !ENV["REAL"]
+
+      @address = Address.create!
+      lambda {
+        Person.create!(:address => @address)
+      }.should change(@address, :number_of_residents).by(1)
 
       # one from the line above and two from the after_commit
       @address.people.count.should == 3

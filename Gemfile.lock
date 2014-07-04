@@ -54,7 +54,7 @@ DEPENDENCIES
   bump
   rails-observers
   rake
-  rspec (~> 2)
+  rspec
   sqlite3
   test_after_commit!
   wwtd

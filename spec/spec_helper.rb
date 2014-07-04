@@ -30,4 +30,7 @@ RSpec.configure do |config|
       end
     end
   end
+
+  config.expect_with(:rspec) { |c| c.syntax = :should }
+  config.mock_with(:rspec) { |c| c.syntax = :should }
 end

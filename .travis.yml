@@ -11,7 +11,7 @@ rvm:
   - 2.1.2
 env:
   - REAL=1
-  - SUBBED=1
+  - TEST=1
 matrix:
   exclude:
     - rvm: ree

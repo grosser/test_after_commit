@@ -15,5 +15,5 @@ Gem::Specification.new name, TestAfterCommit::VERSION do |s|
   s.add_development_dependency "bump"
   s.add_development_dependency "rake"
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "rspec", "~> 2"
+  s.add_development_dependency "rspec"
 end

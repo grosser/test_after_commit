@@ -43,6 +43,7 @@ Inspired by https://gist.github.com/1305285
  - [James Le Cuirot](https://github.com/chewi)
  - [emirose](https://github.com/emirose)
  - [Brad Gessler](https://github.com/bradgessler)
+ - [Rohan McGovern](https://github.com/rohanpm)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

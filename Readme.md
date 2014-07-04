@@ -32,7 +32,7 @@ end
 
 TIPS
 ====
- - hooks do not re-raise errors (with or without this gem)
+ - hooks do not re-raise errors (with or without this gem) use [after_commit_exception_notification](https://github.com/grosser/after_commit_exception_notification)
 
 Author
 ======

@@ -28,9 +28,10 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
     if ActiveRecord::VERSION::MAJOR == 3
       commit_transaction_records(false)
     else
-      @transaction.commit_records
-      @transaction.records.clear # prevent duplicate .commit!
-      @transaction.instance_variable_get(:@state).set_state(nil)
+      transaction = @transaction || @transaction_manager.current_transaction
+      transaction.commit_records
+      transaction.records.clear # prevent duplicate .commit!
+      transaction.instance_variable_get(:@state).set_state(nil)
     end
   end
 

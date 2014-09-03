@@ -44,6 +44,7 @@ Inspired by https://gist.github.com/1305285
  - [emirose](https://github.com/emirose)
  - [Brad Gessler](https://github.com/bradgessler)
  - [Rohan McGovern](https://github.com/rohanpm)
+ - [lsylvester](https://github.com/lsylvester)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

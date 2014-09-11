@@ -6,7 +6,7 @@ Gem::Specification.new name, TestAfterCommit::VERSION do |s|
   s.authors = ["Michael Grosser"]
   s.email = "michael@grosser.it"
   s.homepage = "https://github.com/grosser/#{name}"
-  s.files = `git ls-files lib Readme.md`.split("\n")
+  s.files = `git ls-files lib Readme.md LICENSE`.split("\n")
   s.license = 'MIT'
 
   s.add_runtime_dependency "activerecord", ">= 3.2"

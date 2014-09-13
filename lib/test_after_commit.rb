@@ -14,11 +14,14 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
         rolled_back = true
         raise e
       ensure
-        if @test_open_transactions == 1 && !rolled_back
-          test_commit_records
+        begin
+          if @test_open_transactions == 1 && !rolled_back
+            test_commit_records
+          end
+        ensure
+          @test_open_transactions -= 1
+          result
         end
-        @test_open_transactions -= 1
-        result
       end
     end
   end
@@ -29,9 +32,12 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       commit_transaction_records(false)
     else
       transaction = @transaction || @transaction_manager.current_transaction
-      transaction.commit_records
-      transaction.records.clear # prevent duplicate .commit!
-      transaction.instance_variable_get(:@state).set_state(nil)
+      begin
+        transaction.commit_records
+      ensure
+        transaction.records.clear # prevent duplicate .commit!
+        transaction.instance_variable_get(:@state).set_state(nil)
+      end
     end
   end
 

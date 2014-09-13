@@ -1,10 +1,14 @@
 require 'spec_helper'
 
-describe TestAfterCommit do
-  def rails4?
-    ActiveRecord::VERSION::MAJOR >= 4
-  end
+def rails4?
+  ActiveRecord::VERSION::MAJOR >= 4
+end
 
+def rails42?
+  rails4? && ActiveRecord::VERSION::MINOR >= 2
+end
+
+describe TestAfterCommit do
   before do
     CarObserver.recording = false
     Car.called.clear
@@ -67,6 +71,29 @@ describe TestAfterCommit do
     car = Car.new
     car.raise_error = true
     car.save!
+  end
+
+  if rails42?
+    context "config.active_record.raise_in_transactional_callbacks = true" do
+      before do
+        @raise_in_transactional_callbacks = ActiveRecord::Base.raise_in_transactional_callbacks
+        ActiveRecord::Base.raise_in_transactional_callbacks = true
+      end
+
+      after do
+        ActiveRecord::Base.raise_in_transactional_callbacks = @raise_in_transactional_callbacks
+      end
+
+      it "keeps working after an exception is raised" do
+        car = Car.new
+        car.raise_error = true
+        lambda { car.save! }.should raise_error
+
+        car = Car.new
+        car.save!
+        Car.called.should include(:always)
+      end
+    end
   end
 
   it "can do 1 save in after_commit" do

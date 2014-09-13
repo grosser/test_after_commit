@@ -74,14 +74,15 @@ describe TestAfterCommit do
   end
 
   if rails42?
-    context "config.active_record.raise_in_transactional_callbacks = true" do
-      before do
-        @raise_in_transactional_callbacks = ActiveRecord::Base.raise_in_transactional_callbacks
+    context "with config.active_record.raise_in_transactional_callbacks" do
+      around do |test|
+        old = ActiveRecord::Base.raise_in_transactional_callbacks
         ActiveRecord::Base.raise_in_transactional_callbacks = true
-      end
-
-      after do
-        ActiveRecord::Base.raise_in_transactional_callbacks = @raise_in_transactional_callbacks
+        begin
+          test.call
+        ensure
+          ActiveRecord::Base.raise_in_transactional_callbacks = old
+        end
       end
 
       it "keeps working after an exception is raised" do
@@ -141,7 +142,7 @@ describe TestAfterCommit do
 
     it "should record rollbacks caused by ActiveRecord::Rollback" do
       Car.transaction do
-        car = Car.create
+        Car.create
         raise ActiveRecord::Rollback
       end
       Car.called.should == [:observed_after_rollback]

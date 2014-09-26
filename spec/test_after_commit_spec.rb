@@ -98,8 +98,6 @@ describe TestAfterCommit do
   end
 
   it "can do 1 save in after_commit" do
-    pending "different results than real" unless ENV['REAL']
-
     car = Car.new
     car.do_after_create_save = true
     car.save!
@@ -158,6 +156,20 @@ describe TestAfterCommit do
         e.message.should == 'simulated error'
       end
       Car.called.should == [:observed_after_rollback]
+    end
+
+    it "should see the correct number of open transactions during callbacks" do
+      skip if ENV["REAL"]
+      begin
+        open_txn = nil
+        CarObserver.callback = proc { open_txn = Car.connection.instance_variable_get(:@test_open_transactions) }
+        Car.transaction do
+          Car.create
+        end
+        open_txn.should == 0
+      ensure
+        CarObserver.callback = nil
+      end
     end
   end
 

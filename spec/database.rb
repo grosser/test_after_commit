@@ -100,12 +100,14 @@ end
 
 class CarObserver < ActiveRecord::Observer
   cattr_accessor :recording
+  cattr_accessor :callback
 
   [:after_commit, :after_rollback].each do |action|
     define_method action do |record|
       return unless recording
       Car.called << "observed_#{action}".to_sym
       Untracked.create!
+      callback.call() if callback
     end
   end
 end

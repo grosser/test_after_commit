@@ -46,6 +46,7 @@ Inspired by https://gist.github.com/1305285
  - [Rohan McGovern](https://github.com/rohanpm)
  - [lsylvester](https://github.com/lsylvester)
  - [Tony Novak](https://github.com/afn)
+ - [Brian Palmer](https://github.com/codekitchen)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

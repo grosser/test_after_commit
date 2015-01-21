@@ -1,5 +1,7 @@
 Make after_commit callbacks fire in tests for Rails 3+ with transactional_fixtures = true.
 
+**Deprecation** this is no longer needed on rails 5.0+ https://github.com/rails/rails/pull/18458
+
 Install
 =======
 

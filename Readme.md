@@ -49,6 +49,7 @@ Inspired by https://gist.github.com/1305285
  - [lsylvester](https://github.com/lsylvester)
  - [Tony Novak](https://github.com/afn)
  - [Brian Palmer](https://github.com/codekitchen)
+ - [Oleg Dashevskii](https://github.com/be9)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

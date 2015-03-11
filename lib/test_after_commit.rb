@@ -54,12 +54,8 @@ if ActiveRecord::VERSION::MAJOR >= 4
   ActiveRecord::Base.class_eval do
     alias_method :sync_with_transaction_state_with_state, :sync_with_transaction_state
     def sync_with_transaction_state
-      if @reflects_state
-        @reflects_state[0] = true
-      else
-        @reflects_state = [true]
-      end
-
+      @reflects_state ||= []
+      @reflects_state[0] = true
       sync_with_transaction_state_with_state
     end
   end

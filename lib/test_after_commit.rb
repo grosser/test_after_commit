@@ -12,7 +12,7 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
         if ActiveRecord::VERSION::MAJOR == 3
           @_current_transaction_records.push([]) if @_current_transaction_records.empty?
         end
-        result = yield
+        result = yield if block_given?
       rescue Exception => e
         rolled_back = true
         raise e

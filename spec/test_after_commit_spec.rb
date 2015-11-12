@@ -23,6 +23,13 @@ describe TestAfterCommit do
     Car.called.should == [:create, :always]
   end
 
+  it "does not fire if turned off" do
+    TestAfterCommit.enabled_by_default = false # this would ideally be called in test_helper
+    Car.create
+    Car.called.should == []
+    TestAfterCommit.enabled_by_default = true # set back for the rest of the tests to pass
+  end
+
   it "fires on update" do
     car = Car.create
     Car.called.clear
@@ -102,7 +109,7 @@ describe TestAfterCommit do
     car.do_after_create_save = true
     car.save!
 
-    expected = if rails4?
+    expected = if rails42?
       [:save_once, :create, :always, :save_once, :always]
     else
       [:save_once, :create, :always, :save_once, :create, :always]

@@ -7,16 +7,26 @@ module TestAfterCommit
   def self.with_commits(&block)
     @commits_on = true
     yield(block)
-    @commits_on = @enabled_by_default
+    reset
+  end
+
+  def self.without_commits(&block)
+    @commits_on = false
+    yield(block)
+    reset
   end
 
   def self.enabled_by_default=(val)
     @enabled_by_default = val
-    @commits_on = val
+    reset
   end
 
   def self.commits_on
     @commits_on
+  end
+
+  def self.reset
+    @commits_on = @enabled_by_default
   end
 end
 

@@ -23,13 +23,6 @@ describe TestAfterCommit do
     Car.called.should == [:create, :always]
   end
 
-  it "does not fire if turned off" do
-    TestAfterCommit.enabled_by_default = false # this would ideally be called in test_helper
-    Car.create
-    Car.called.should == []
-    TestAfterCommit.enabled_by_default = true # set back for the rest of the tests to pass
-  end
-
   it "fires on update" do
     car = Car.create
     Car.called.clear
@@ -176,6 +169,31 @@ describe TestAfterCommit do
         open_txn.should == 0
       ensure
         CarObserver.callback = nil
+      end
+    end
+  end
+
+  context "block behavior" do
+    it "does not fire if turned off" do
+      TestAfterCommit.enabled_by_default = false # this would ideally be called in test_helper
+      Car.create
+      Car.called.should == []
+      TestAfterCommit.enabled_by_default = true # set back for the rest of the tests to pass
+    end
+
+    it "always fires with with_commit" do
+      TestAfterCommit.enabled_by_default = false
+      TestAfterCommit.with_commits do
+        Car.create
+        Car.called.should == [:create, :always]
+      end
+      TestAfterCommit.enabled_by_default = true
+    end
+
+    it "does not fire with without_commits" do
+      TestAfterCommit.without_commits do
+        Car.create
+        Car.called.should == []
       end
     end
   end

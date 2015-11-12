@@ -31,6 +31,25 @@ it "sets $foo on commit" do
   $foo.should == 1
 end
 ```
+By default, all after commits will fire throughout the test suite. However, you may wish to choose when to run them or not to. For example, when adding this to an existing test suite.
+
+In your test_helper, you can specify the default
+
+```
+TestAfterCommit.enabled_by_default = true
+```
+
+Then use blocks in your tests to change the behavior:
+
+```
+TestAfterCommit.with_commits do
+  my_tests
+end
+
+TestAfterCommit.without_commits do
+  my_tests
+end
+```
 
 TIPS
 ====

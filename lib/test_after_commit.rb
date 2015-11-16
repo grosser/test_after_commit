@@ -1,32 +1,17 @@
 require 'test_after_commit/version'
 
 module TestAfterCommit
-  @enabled_by_default = true
-  @commits_on = true
+  @enabled = true
+  class << self
+    attr_accessor :enabled
 
-  def self.with_commits(&block)
-    @commits_on = true
-    yield(block)
-    reset
-  end
-
-  def self.without_commits(&block)
-    @commits_on = false
-    yield(block)
-    reset
-  end
-
-  def self.enabled_by_default=(val)
-    @enabled_by_default = val
-    reset
-  end
-
-  def self.commits_on
-    @commits_on
-  end
-
-  def self.reset
-    @commits_on = @enabled_by_default
+    def with_commits(value)
+      old = enabled
+      self.enabled = value
+      yield
+    ensure
+      self.enabled = old
+    end
   end
 end
 
@@ -46,7 +31,7 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       ensure
         begin
           @test_open_transactions -= 1
-          if TestAfterCommit.commits_on && @test_open_transactions == 0 && !rolled_back
+          if TestAfterCommit.enabled && @test_open_transactions == 0 && !rolled_back
             test_commit_records
           end
         ensure

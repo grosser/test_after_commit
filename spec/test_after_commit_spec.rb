@@ -14,6 +14,10 @@ describe TestAfterCommit do
     Car.called.clear
   end
 
+  after do
+    TestAfterCommit.enabled = true
+  end
+
   it "has a VERSION" do
     TestAfterCommit::VERSION.should =~ /^[\.\da-z]+$/
   end
@@ -175,23 +179,21 @@ describe TestAfterCommit do
 
   context "block behavior" do
     it "does not fire if turned off" do
-      TestAfterCommit.enabled_by_default = false # this would ideally be called in test_helper
+      TestAfterCommit.enabled = false
       Car.create
       Car.called.should == []
-      TestAfterCommit.enabled_by_default = true # set back for the rest of the tests to pass
     end
 
-    it "always fires with with_commit" do
-      TestAfterCommit.enabled_by_default = false
-      TestAfterCommit.with_commits do
+    it "always fires with when enabled by a block" do
+      TestAfterCommit.enabled = false
+      TestAfterCommit.with_commits(true) do
         Car.create
         Car.called.should == [:create, :always]
       end
-      TestAfterCommit.enabled_by_default = true
     end
 
-    it "does not fire with without_commits" do
-      TestAfterCommit.without_commits do
+    it "does not fire with without commits" do
+      TestAfterCommit.with_commits(false) do
         Car.create
         Car.called.should == []
       end

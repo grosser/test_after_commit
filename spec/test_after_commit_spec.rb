@@ -1,13 +1,5 @@
 require 'spec_helper'
 
-def rails4?
-  ActiveRecord::VERSION::MAJOR >= 4
-end
-
-def rails42?
-  rails4? && ActiveRecord::VERSION::MINOR >= 2
-end
-
 describe TestAfterCommit do
   before do
     CarObserver.recording = false
@@ -15,7 +7,7 @@ describe TestAfterCommit do
   end
 
   after do
-    TestAfterCommit.enabled = true
+    TestAfterCommit.enabled = true unless ENV["REAL"]
   end
 
   it "has a VERSION" do
@@ -71,10 +63,18 @@ describe TestAfterCommit do
     Car.called.should == [:create, :always]
   end
 
-  it "does not raises errors" do
-    car = Car.new
-    car.raise_error = true
-    car.save!
+  if rails42?
+    it "raises errors" do
+      car = Car.new
+      car.raise_error = true
+      lambda { car.save! }.should raise_error(RuntimeError)
+    end
+  else
+    it "does not raises errors" do
+      car = Car.new
+      car.raise_error = true
+      car.save!
+    end
   end
 
   if rails42?
@@ -92,7 +92,7 @@ describe TestAfterCommit do
       it "keeps working after an exception is raised" do
         car = Car.new
         car.raise_error = true
-        lambda { car.save! }.should raise_error
+        lambda { car.save! }.should raise_error(RuntimeError)
 
         car = Car.new
         car.save!
@@ -106,7 +106,7 @@ describe TestAfterCommit do
     car.do_after_create_save = true
     car.save!
 
-    expected = if rails42?
+    expected = if rails4?
       [:save_once, :create, :always, :save_once, :always]
     else
       [:save_once, :create, :always, :save_once, :create, :always]
@@ -205,12 +205,11 @@ describe TestAfterCommit do
         Car.called.should == []
       end
     end
-  end
+  end unless ENV["REAL"]
 
   context "nested after_commit" do
     it 'is executed' do
-      skip if ENV["REAL"] && ActiveRecord::VERSION::MAJOR == 4 # infinite loop
-      pending if !ENV["REAL"]
+      skip if rails4? # infinite loop in REAL and fails in TEST and lots of noise when left as pending
 
       @address = Address.create!
       lambda {

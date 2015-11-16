@@ -36,17 +36,17 @@ By default, all after commits will fire throughout the test suite. However, you 
 In your test_helper, you can specify the default
 
 ```
-TestAfterCommit.enabled_by_default = true
+TestAfterCommit.enabled = true
 ```
 
 Then use blocks in your tests to change the behavior:
 
 ```
-TestAfterCommit.with_commits do
+TestAfterCommit.with_commits(true) do
   my_tests
 end
 
-TestAfterCommit.without_commits do
+TestAfterCommit.with_commits(false) do
   my_tests
 end
 ```

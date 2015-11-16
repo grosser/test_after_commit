@@ -31,7 +31,8 @@ it "sets $foo on commit" do
   $foo.should == 1
 end
 ```
-By default, all after commits will fire throughout the test suite. However, you may wish to choose when to run them or not to. For example, when adding this to an existing test suite.
+
+### Temporary disable after commit hooks
 
 In your test_helper, you can specify the default
 

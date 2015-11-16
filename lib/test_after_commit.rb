@@ -5,7 +5,7 @@ module TestAfterCommit
   class << self
     attr_accessor :enabled
 
-    def with_commits(value)
+    def with_commits(value = true)
       old = enabled
       self.enabled = value
       yield

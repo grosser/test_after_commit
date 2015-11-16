@@ -192,6 +192,13 @@ describe TestAfterCommit do
       end
     end
 
+    it "defaults to with commits" do
+      TestAfterCommit.with_commits do
+        Car.create
+        Car.called.should == [:create, :always]
+      end
+    end
+
     it "does not fire with without commits" do
       TestAfterCommit.with_commits(false) do
         Car.create

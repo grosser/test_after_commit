@@ -5,6 +5,10 @@ if ActiveRecord::VERSION::MAJOR > 3
   require "rails/observers/activerecord/active_record"
 end
 
+if ActiveRecord::VERSION::STRING >= "4.2.0"
+  ActiveRecord::Base.raise_in_transactional_callbacks = true
+end
+
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
   :database => ':memory:'
@@ -16,22 +20,22 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "cars", :force => true do |t|
     t.integer :counter, :default => 0, :null => false
     t.integer :car_id
-    t.timestamps
+    t.timestamps :null => false
   end
 
   create_table "addresses", :force => true do |t|
     t.integer :number_of_residents, :default => 0, :null => false
-    t.timestamps
+    t.timestamps :null => false
   end
 
   create_table "people", :force => true do |t|
     t.belongs_to :address
-    t.timestamps
+    t.timestamps :null => false
   end
 
   create_table "fu_bears", :force => true do |t|
     t.string :name
-    t.timestamps
+    t.timestamps :null => false
   end
 end
 

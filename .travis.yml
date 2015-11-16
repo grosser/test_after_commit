@@ -1,5 +1,6 @@
-bundler_args: ""
 language: ruby
+sudo: false
+cache: bundler
 gemfile:
   - gemfiles/32.gemfile
   - gemfiles/40.gemfile

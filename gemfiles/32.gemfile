@@ -3,3 +3,5 @@ source "https://rubygems.org"
 gemspec :path=>"../"
 
 gem "activerecord", "~> 3.2.18"
+gem "i18n", "~> 0.6.9" # 0.7 does not support 1.9
+gem "bump", "0.5.2" # after that it's 1.9.3 only

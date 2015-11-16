@@ -1,6 +1,18 @@
 require 'test_after_commit/version'
 
 module TestAfterCommit
+  @enabled = true
+  class << self
+    attr_accessor :enabled
+
+    def with_commits(value = true)
+      old = enabled
+      self.enabled = value
+      yield
+    ensure
+      self.enabled = old
+    end
+  end
 end
 
 ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
@@ -19,7 +31,7 @@ ActiveRecord::ConnectionAdapters::DatabaseStatements.class_eval do
       ensure
         begin
           @test_open_transactions -= 1
-          if @test_open_transactions == 0 && !rolled_back
+          if TestAfterCommit.enabled && @test_open_transactions == 0 && !rolled_back
             test_commit_records
           end
         ensure

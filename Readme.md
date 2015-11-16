@@ -32,6 +32,26 @@ it "sets $foo on commit" do
 end
 ```
 
+### Temporary disable after commit hooks
+
+In your test_helper, you can specify the default
+
+```
+TestAfterCommit.enabled = true
+```
+
+Then use blocks in your tests to change the behavior:
+
+```
+TestAfterCommit.with_commits(true) do
+  my_tests
+end
+
+TestAfterCommit.with_commits(false) do
+  my_tests
+end
+```
+
 TIPS
 ====
  - hooks do not re-raise errors (with or without this gem) use [after_commit_exception_notification](https://github.com/grosser/after_commit_exception_notification)

@@ -1,8 +1,8 @@
 module TestAfterCommit::DatabaseStatements
-  def transaction(*args)
+  def transaction(*)
     @test_open_transactions ||= 0
 
-    super(*args) do
+    super do
       begin
         @test_open_transactions += 1
         if ActiveRecord::VERSION::MAJOR == 3

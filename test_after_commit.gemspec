@@ -9,6 +9,7 @@ Gem::Specification.new name, TestAfterCommit::VERSION do |s|
   s.files = `git ls-files lib Readme.md MIT-LICENSE`.split("\n")
   s.license = 'MIT'
 
+  s.required_ruby_version = '>= 2.0.0'
   s.add_runtime_dependency "activerecord", ">= 3.2"
 
   s.add_development_dependency "wwtd"

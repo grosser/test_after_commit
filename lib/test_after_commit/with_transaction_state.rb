@@ -7,6 +7,6 @@ module TestAfterCommit
       super
     end
 
-    ActiveRecord::Base.__send__(:include, self)
+    ActiveRecord::Base.include(self)
   end
 end

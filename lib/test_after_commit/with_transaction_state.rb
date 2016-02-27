@@ -6,7 +6,5 @@ module TestAfterCommit
       @reflects_state[0] = true
       super
     end
-
-    ActiveRecord::Base.prepend(self)
   end
 end

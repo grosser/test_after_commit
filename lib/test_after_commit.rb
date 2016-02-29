@@ -1,5 +1,9 @@
 require 'test_after_commit/version'
 
+if ActiveRecord::VERSION::MAJOR >= 5
+  raise 'after_commit testing is baked into rails 5, you no longer need test_after_commit gem'
+end
+
 if ActiveRecord::VERSION::MAJOR >= 4
   require 'test_after_commit/with_transaction_state'
   ActiveRecord::Base.send(:prepend, TestAfterCommit::WithTransactionState)

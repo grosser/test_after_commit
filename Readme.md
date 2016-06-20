@@ -71,6 +71,7 @@ Inspired by https://gist.github.com/1305285
  - [Brian Palmer](https://github.com/codekitchen)
  - [Oleg Dashevskii](https://github.com/be9)
  - [Jonathan Spies](https://github.com/jspies)
+ - [Nick Sieger](https://github.com/nicksieger)
 
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>

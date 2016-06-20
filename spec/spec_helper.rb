@@ -22,11 +22,12 @@ end
 
 module ConnectionFinder
   def connection
-    @connection ||= if rails4?
-                      ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection).first
-                    else
-                      ActiveRecord::Base.connection_handler.connection_pools.values.map(&:connection).first
-                    end
+    @connection ||=
+      if rails4?
+        ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection).first
+      else
+        ActiveRecord::Base.connection_handler.connection_pools.values.map(&:connection).first
+      end
   end
 end
 

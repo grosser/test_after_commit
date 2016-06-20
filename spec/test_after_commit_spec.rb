@@ -226,10 +226,10 @@ end
 
 if rails3? && !ENV["REAL"]
   describe TestAfterCommit, "with mixed TAC enabled specs" do
-    before {
+    before do
       TestAfterCommit.enabled = false
       Car.called.clear
-    }
+    end
 
     context "and a test with TAC disabled" do
       it "creates a record" do

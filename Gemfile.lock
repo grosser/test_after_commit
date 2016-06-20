@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    test_after_commit (1.0.0)
+    test_after_commit (1.1.0)
       activerecord (>= 3.2)
 
 GEM
@@ -62,4 +62,4 @@ DEPENDENCIES
   wwtd
 
 BUNDLED WITH
-   1.11.2
+   1.12.3

@@ -15,8 +15,12 @@ module TestAfterCommit::DatabaseStatements
       ensure
         begin
           @test_open_transactions -= 1
-          if TestAfterCommit.enabled && @test_open_transactions == 0 && !rolled_back
-            test_commit_records
+          if @test_open_transactions == 0 && !rolled_back
+            if TestAfterCommit.enabled
+              test_commit_records
+            elsif ActiveRecord::VERSION::MAJOR == 3
+              @_current_transaction_records.clear
+            end
           end
         ensure
           result

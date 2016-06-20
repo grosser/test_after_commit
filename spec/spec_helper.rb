@@ -2,6 +2,10 @@ require 'bundler/setup'
 require File.expand_path '../database', __FILE__
 I18n.enforce_available_locales = false
 
+def rails3?
+  ActiveRecord::VERSION::MAJOR == 3
+end
+
 def rails4?
   ActiveRecord::VERSION::MAJOR >= 4
 end
@@ -16,15 +20,25 @@ else
   require 'test_after_commit'
 end
 
+module ConnectionFinder
+  def connection
+    @connection ||= if rails4?
+                      ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection).first
+                    else
+                      ActiveRecord::Base.connection_handler.connection_pools.values.map(&:connection).first
+                    end
+  end
+end
+
 RSpec.configure do |config|
+  config.include ConnectionFinder
+
   unless ENV['REAL']
     config.around do |example|
       # open a transaction without using .transaction as activerecord use_transactional_fixtures does
       if ActiveRecord::VERSION::MAJOR > 3
-        connection = ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection).first
         connection.begin_transaction :joinable => false
       else
-        connection = ActiveRecord::Base.connection_handler.connection_pools.values.map(&:connection).first
         connection.increment_open_transactions
         connection.transaction_joinable = false
         connection.begin_db_transaction

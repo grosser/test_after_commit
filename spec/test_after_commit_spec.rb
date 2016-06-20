@@ -223,3 +223,36 @@ describe TestAfterCommit do
     end
   end
 end
+
+if rails3? && !ENV["REAL"]
+  describe TestAfterCommit, "with mixed TAC enabled specs" do
+    before do
+      TestAfterCommit.enabled = false
+      Car.called.clear
+    end
+
+    context "and a test with TAC disabled" do
+      it "creates a record" do
+        Car.new.save!
+        Car.called.should == []
+      end
+
+      it "verifies that records are empty before each test 1" do
+        connection.instance_variable_get(:@_current_transaction_records).should be_empty
+      end
+    end
+
+    context "and a test with TAC enabled" do
+      before { TestAfterCommit.enabled = true }
+
+      it "creates a record and fires commit callbacks" do
+        Car.new.save!
+        Car.called.should == [:create, :always]
+      end
+
+      it "verifies that records are empty before each test 2" do
+        connection.instance_variable_get(:@_current_transaction_records).should be_empty
+      end
+    end
+  end
+end

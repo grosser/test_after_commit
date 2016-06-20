@@ -18,6 +18,9 @@ module TestAfterCommit::DatabaseStatements
           if TestAfterCommit.enabled && @test_open_transactions == 0 && !rolled_back
             test_commit_records
           end
+          if ActiveRecord::VERSION::MAJOR == 3 && @test_open_transactions == 0 && !rolled_back
+            @_current_transaction_records.clear
+          end
         ensure
           result
         end

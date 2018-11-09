@@ -60,6 +60,7 @@ class Car < ActiveRecord::Base
   after_commit :save_once, :on => :create, :if => :do_after_create_save
   after_commit :simple_after_commit_on_update, :on => :update
   after_commit :maybe_raise_errors
+  after_commit :save_open_transactions_count
 
   after_save :trigger_rollback
 
@@ -75,7 +76,13 @@ class Car < ActiveRecord::Base
     end
   end
 
+  attr_reader :open_transactions
+
   private
+
+  def save_open_transactions_count
+    @open_transactions = ActiveRecord::Base.connection.open_transactions
+  end
 
   def save_once
     update_attributes(:counter => 3) unless counter == 3

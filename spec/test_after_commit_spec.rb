@@ -19,6 +19,11 @@ describe TestAfterCommit do
     Car.called.should == [:create, :always]
   end
 
+  it "runs callback outside of transaction" do
+    car = Car.create
+    car.open_transactions.should == ActiveRecord::Base.connection.open_transactions
+  end
+
   it "fires on update" do
     car = Car.create
     Car.called.clear

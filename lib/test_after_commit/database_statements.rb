@@ -1,6 +1,8 @@
 module TestAfterCommit::DatabaseStatements
   def transaction(*)
     @test_open_transactions ||= 0
+    run_callbacks = false
+    result = nil
 
     super do
       begin
@@ -13,20 +15,19 @@ module TestAfterCommit::DatabaseStatements
         rolled_back = true
         raise
       ensure
-        begin
-          @test_open_transactions -= 1
-          if @test_open_transactions == 0 && !rolled_back
-            if TestAfterCommit.enabled
-              test_commit_records
-            elsif ActiveRecord::VERSION::MAJOR == 3
-              @_current_transaction_records.clear
-            end
+        @test_open_transactions -= 1
+        if @test_open_transactions == 0 && !rolled_back
+          if TestAfterCommit.enabled
+            run_callbacks = true
+          elsif ActiveRecord::VERSION::MAJOR == 3
+            @_current_transaction_records.clear
           end
-        ensure
-          result
         end
       end
     end
+  ensure
+    test_commit_records if run_callbacks
+    result
   end
 
   def test_commit_records

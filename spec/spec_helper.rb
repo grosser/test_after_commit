@@ -14,10 +14,10 @@ def rails42?
   rails4? && ActiveRecord::VERSION::MINOR >= 2
 end
 
+require 'test_after_commit'
 if ENV['REAL']
   puts 'using real transactions'
-else
-  require 'test_after_commit'
+  TestAfterCommit.enabled = false
 end
 
 module ConnectionFinder

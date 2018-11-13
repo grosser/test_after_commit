@@ -1,6 +1,7 @@
 module TestAfterCommit::DatabaseStatements
   def transaction(*)
     @test_open_transactions ||= 0
+    skip_emulation = ActiveRecord::Base.connection.open_transactions.zero?
     run_callbacks = false
     result = nil
 
@@ -16,7 +17,7 @@ module TestAfterCommit::DatabaseStatements
         raise
       ensure
         @test_open_transactions -= 1
-        if @test_open_transactions == 0 && !rolled_back
+        if @test_open_transactions == 0 && !rolled_back && !skip_emulation
           if TestAfterCommit.enabled
             run_callbacks = true
           elsif ActiveRecord::VERSION::MAJOR == 3

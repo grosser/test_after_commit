@@ -24,6 +24,11 @@ describe TestAfterCommit do
     car.open_transactions.should == ActiveRecord::Base.connection.open_transactions
   end
 
+  it "works outside of transaction" do
+    car = described_class.with_commits(true) { Car.create }
+    car.destroy
+  end if ENV["REAL"]
+
   it "fires on update" do
     car = Car.create
     Car.called.clear

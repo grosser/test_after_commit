@@ -4,6 +4,7 @@ module TestAfterCommit::DatabaseStatements
     skip_emulation = ActiveRecord::Base.connection.open_transactions.zero?
     run_callbacks = false
     result = nil
+    rolled_back = false
 
     super do
       begin
@@ -42,6 +43,9 @@ module TestAfterCommit::DatabaseStatements
       # This is because we're re-using the transaction on the stack, before
       # it's been popped off and re-created by the AR code.
       original = @transaction || @transaction_manager.current_transaction
+
+      return unless original.respond_to?(:records)
+
       transaction = original.dup
       transaction.instance_variable_set(:@records, transaction.records.dup) # deep clone of records array
       original.records.clear                                                # so that this clear doesn't clear out both copies
